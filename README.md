@@ -1,0 +1,4 @@
+jquery.simpleslider
+===================
+
+jquery.simpleslider
