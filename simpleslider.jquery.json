@@ -1,0 +1,26 @@
+{
+  "name": "simpleslider",
+  "title": "Simpleslider",
+  "description": "The best jQuery plugin ever.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/vlewin/jquery.simpleslider",
+  "author": {
+    "name": "Vladislav Lewinn",
+    "email": "vlewin@suse.de"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/vlewin/jquery.simpleslider.git"
+  },
+  "bugs": "https://github.com/vlewin/jquery.simpleslider/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/vlewin/jquery.simpleslider/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "keywords": []
+}
