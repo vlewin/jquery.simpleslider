@@ -4,7 +4,7 @@
 
 /*global $:false */
 
-var simpleSlider = function(element, opts) {
+var SimpleSlider = function(element, opts) {
   this.init = function() {
     this.id = element.selector;
     this.element = $(this.selector);
@@ -14,6 +14,8 @@ var simpleSlider = function(element, opts) {
     this.back_link_selector = opts.back_link_selector;
 
     this.bind();
+
+    return this;
   };
 
   //=== Helper methods
@@ -27,7 +29,7 @@ var simpleSlider = function(element, opts) {
       var parentName = location.pathname.replace(/\//g, '').capitalize();
       var childName = this.activeLink().data('title');
       var back_arrow = '<i class="fa fa-lg fa-arrow-circle-left"></i> ';
-      var parent = '<li><a class="back">' + back_arrow + parentName + '</a>';
+      var parent = '<li><a class="' + this.back_link_selector.replace('.', '') +'">' + back_arrow + parentName + '</a>';
       var child = '<li><a>' + childName + '</a></li>';
       $(this.breadcrumb_selector).html(parent).append(child).show();
     }
@@ -51,14 +53,14 @@ var simpleSlider = function(element, opts) {
     return this;
   };
 
-  this.slide = function(direction, animation) {
+  this.slide = function(direction) {
     var first_slide = $(this.id).find('ul li:first-of-type');
 
-    if (typeof(animation) === 'undefined') {
-      first_slide.addClass('animated');
-    } else {
-      first_slide.removeClass('animated');
-    }
+    // if (typeof(animation) === 'undefined') {
+    //   first_slide.addClass('animated');
+    // } else {
+    //   first_slide.removeClass('animated');
+    // }
 
     if (direction === 'right') {
       first_slide.css('margin-left', '-100%');
@@ -74,10 +76,13 @@ var simpleSlider = function(element, opts) {
       plugin.showBreadCrumb().slide('right').html(data);
     });
 
+    $(this.id).find('ul li:last-of-type').addClass('active');
+
     return this;
   };
 
   this.back = function() {
+    $(this.id).find('ul li:last-of-type').removeClass('active');
     this.hideBreadCrumb().slide('left');
   };
 
@@ -86,6 +91,8 @@ var simpleSlider = function(element, opts) {
     var plugin = this;
 
     $(window).on('load', function(e) {
+      // console.info('Window.onload');
+
       if (location.hash) {
         e.preventDefault();
 
@@ -103,6 +110,8 @@ var simpleSlider = function(element, opts) {
     });
 
     $(window).on('popstate', function(e) {
+      // console.info('window.popstate');
+
       if (location.hash) {
         e.preventDefault();
 
@@ -149,18 +158,30 @@ var simpleSlider = function(element, opts) {
         return false;
       }
     });
-
   };
 
 };
 
-(function($) {
-  $.fn.simpleslider = function(options) {
-    var opts = $.extend({}, $.fn.simpleslider.defaults, options);
-    var instance = new simpleSlider($(this), opts);
-    instance.init();
-  };
-}(jQuery));
+$.fn.simpleslider = function(options) {
+  var opts = $.extend({}, $.fn.simpleslider.defaults, options);
+  var slider_instance = new SimpleSlider($(this), opts);
+  return slider_instance.init();
+};
 
 
+// Javascript helpers
+String.prototype.capitalize = function() {
+  return this.charAt(0).toUpperCase() + this.slice(1);
+};
 
+String.prototype.string = function () {
+  return this.replace('.', '');
+};
+
+Number.prototype.px = function () {
+  return this + ('px');
+};
+
+Array.prototype.last = function () {
+  return this[this.length - 1];
+};
