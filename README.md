@@ -1,6 +1,6 @@
 # Simpleslider
 
-The best jQuery plugin ever.
+SimpleSlider jQuery plugin with Ruby on Rails integration.
 
 ## Getting Started
 Download the [production version][min] or the [development version][max].
@@ -11,12 +11,16 @@ Download the [production version][min] or the [development version][max].
 In your web page:
 
 ```html
+<link href="/src/simpleslider.css" rel="stylesheet" />
 <script src="jquery.js"></script>
 <script src="dist/simpleslider.min.js"></script>
 <script>
-jQuery(function($) {
-  $.awesome(); // "awesome"
-});
+  $("#simpleslider").simpleslider({
+    link_selector: '.slider-link',
+    back_link_selector : '.back',
+    breadcrumb_selector: '#breadcrumb',
+    breadcrumb: true
+  });
 </script>
 ```
 
@@ -24,7 +28,22 @@ jQuery(function($) {
 _(Coming soon)_
 
 ## Examples
-_(Coming soon)_
+```html
+  <body>
+    <ul id="breadcrumb"></ul>
+    <div id="simpleslider">
+    <ul>
+      <li>
+        First page (index page)
+        <a href="/posts/1" data-title="Title 1" data-target="#1" data-no-turbolink="true" data-id="1" class="slink">Show</a>
+      </li>
+      <li>
+        Last page (details page)
+        <a href="/posts" class="back">Back</a>
+      </li>
+    </ul>
+  </body>
+```
 
 ## Release History
 _(Nothing yet)_
