@@ -1,62 +1,96 @@
 (function($) {
-  /*
-    ======== A Handy Little QUnit Reference ========
-    http://api.qunitjs.com/
 
-    Test methods:
-      module(name, {[setup][ ,teardown]})
-      test(name, callback)
-      expect(numberOfAssertions)
-      stop(increment)
-      start(decrement)
-    Test assertions:
-      ok(value, [message])
-      equal(actual, expected, [message])
-      notEqual(actual, expected, [message])
-      deepEqual(actual, expected, [message])
-      notDeepEqual(actual, expected, [message])
-      strictEqual(actual, expected, [message])
-      notStrictEqual(actual, expected, [message])
-      throws(block, [expected], [message])
-  */
+  // QUnit.log = function(result, message)
+  // {
+  //     if (window.console && window.console.log)
+  //     {
+  //        window.console.log(result +' :: '+ message);
+  //     }
+  // }
 
-  module('jQuery#simpleslider', {
-    // This will run before each test in this module.
-    setup: function() {
-      this.elems = $('#qunit-fixture').children();
+  /*global sinon:false */
+  var slider = null;
+
+  module("SimpleSlider", {
+    setup: function () {
+      slider = $("#simpleslider").simpleslider({
+          breadcrumb_selector: '#breadcrumb',
+          breadcrumb: true,
+          link_selector: '.slink',
+          back_link_selector: '.back'
+      });
+
+      this.server = sinon.fakeServer.create();
+      this.server.respondWith("GET", "/posts/1", [200, { "Content-Type": "plain/text" }, "AJAX response"]);
+
+      sinon.stub(window.history, 'pushState', function (object) {
+        if(object.path.indexOf('#') > -1) {
+          location.hash = '#1';
+        }
+      });
+    },
+
+    teardown: function () {
+      this.server.restore();
+      window.history.pushState.restore();
     }
   });
 
-  test('is chainable', function() {
-    expect(1);
-    // Not a bad test to run on collection methods.
-    strictEqual(this.elems.simpleslider(), this.elems, 'should be chainable');
+
+  test("init() - should initialize a simpleslider", function () {
+      equal(slider.id, '#simpleslider', 'sets slider id attribute');
+      equal(slider.link_selector, '.slink', 'sets slider link_selector attributes');
+      equal(slider.back_link_selector, '.back', 'sets slider back_link_selector attribute');
+      equal(slider.breadcrumb, true, 'sets breadcrub attribute');
+      equal(slider.breadcrumb_selector, '#breadcrumb', 'sets breadcrumb_selector attribute');
   });
 
-  test('is awesome', function() {
-    expect(1);
-    strictEqual(this.elems.simpleslider().text(), 'awesome0awesome1awesome2', 'should be awesome');
+  test("activeLink() - should return jQuery object for active slider link", function () {
+      $( "a.slink" ).first().click();
+
+      var link = slider.activeLink();
+      equal(window.location.hash, "#1", 'location hash');
+      equal(link.attr('href'), '/posts/1', 'link href');
+      equal(link.data('target'), '#1', 'data target');
+
+      $( "a.back" ).first().click();
+
   });
 
-  module('jQuery.simpleslider');
+  test("showBreadCrumb() - should show a slider breadcrumb", function () {
+      slider.showBreadCrumb();
 
-  test('is awesome', function() {
-    expect(2);
-    strictEqual($.simpleslider(), 'awesome.', 'should be awesome');
-    strictEqual($.simpleslider({punctuation: '!'}), 'awesome!', 'should be thoroughly awesome');
+      equal($(slider.breadcrumb_selector).css("display"), 'block', 'breadcrumb visibility');
+      equal($('#breadcrumb').find('li').length, 2, "number of items" );
+      equal($('#breadcrumb').find('li').last().find('a').html(), slider.activeLink().data('title'), "last item name" );
   });
 
-  module(':simpleslider selector', {
-    // This will run before each test in this module.
-    setup: function() {
-      this.elems = $('#qunit-fixture').children();
-    }
+  test("hideBreadCrumb() - should hide a slider breadcrumb", function () {
+      slider.hideBreadCrumb();
+      equal($('#breadcrumb').find('li').length, 0, "number of items" );
   });
 
-  test('is awesome', function() {
-    expect(1);
-    // Use deepEqual & .get() when comparing jQuery objects.
-    deepEqual(this.elems.filter(':simpleslider').get(), this.elems.last().get(), 'knows awesome when it sees it');
+  test("forward() - slide and append AJAX response", function () {
+      $( "a.slink" ).first().click();
+
+      this.server.respond();
+      equal($('#simpleslider').find('li').last().html(), "AJAX response", "updates details view" );
+      notEqual($('#simpleslider').find('li').first().css('margin-left'), "0px", "last slider page");
+      ok($('#simpleslider').find('li').last().hasClass('active'));
+
+      $( "a.back" ).first().click();
+  });
+
+  test("back() - slide back to index page", function () {
+      slider.back();
+
+      equal($('#simpleslider').find('li').first().css('margin-left'), "0px", "first slider page");
+      ok(!$('#simpleslider').find('li').last().hasClass('active'));
+  });
+
+  test("html() - sets last slider page content", function () {
+      slider.html("Test");
+      equal($('#simpleslider').find('li').last().html(), "Test", "HTML content");
   });
 
 }(jQuery));
