@@ -1,4 +1,4 @@
-# Simpleslider [![Build Status](https://secure.travis-ci.org/vlewin/jquery.simpleslider.png?branch=master)](https://travis-ci.org/vlewin/jquery.simpleslider)
+# SimpleSlider [![Build Status](https://secure.travis-ci.org/vlewin/jquery.simpleslider.png?branch=master)](https://travis-ci.org/vlewin/jquery.simpleslider)
 
 SimpleSlider jQuery plugin with Ruby on Rails integration. 
 
