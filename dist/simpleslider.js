@@ -1,4 +1,4 @@
-/*! Simpleslider - v0.1.0 - 2014-03-03
+/*! Simpleslider - v0.1.0 - 2014-03-04
 * https://github.com/vlewin/jquery.simpleslider
 * Copyright (c) 2014 Vladislav Lewinn; Licensed MIT */
 /*! Simpleslider - v0.1.0 - 2014-02-28
@@ -66,9 +66,9 @@ var SimpleSlider = function(element, opts) {
     // }
 
     if (direction === 'right') {
-      first_slide.css('margin-left', '-100%');
+      first_slide.css('margin-left', '-100%').css('visibility', 'hidden');
     } else {
-      first_slide.css('margin-left', '0%');
+      first_slide.css('margin-left', '0%').css('visibility', 'visible');
     }
     return this;
   };

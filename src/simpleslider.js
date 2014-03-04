@@ -63,9 +63,9 @@ var SimpleSlider = function(element, opts) {
     // }
 
     if (direction === 'right') {
-      first_slide.css('margin-left', '-100%');
+      first_slide.css('margin-left', '-100%').css('visibility', 'hidden');
     } else {
-      first_slide.css('margin-left', '0%');
+      first_slide.css('margin-left', '0%').css('visibility', 'visible');
     }
     return this;
   };
