@@ -2,6 +2,10 @@
 
 SimpleSlider - jQuery plugin with Ruby on Rails integration. 
 
+Features:
+* browser history support (back button)
+* browser reload support (page reload)
+
 ## Getting Started
 Download the [production version][min] or the [development version][max].
 
