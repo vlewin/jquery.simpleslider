@@ -36,15 +36,15 @@ _(Coming soon)_
   <body>
     <ul id="breadcrumb"></ul>
     <div id="simpleslider">
-    <ul>
-      <li>
+    <section data-crumb="Posts">
+      <article>
         First page (index page)
         <a href="/posts/1" data-title="Title 1" data-target="#1" data-no-turbolink="true" data-id="1" class="slink">Show</a>
-      </li>
-      <li>
+      </article>
+      <article>
         Last page (details page)
         <a href="/posts" class="back">Back</a>
-      </li>
+      </article>
     </ul>
   </body>
 ```
