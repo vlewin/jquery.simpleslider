@@ -1,12 +1,11 @@
-/*! Simpleslider - v0.1.0 - 2014-03-04
+/*! Simpleslider - v0.1.0 - 2014-03-06
 * https://github.com/vlewin/jquery.simpleslider
 * Copyright (c) 2014 Vladislav Lewinn; Licensed MIT */
-/*! Simpleslider - v0.1.0 - 2014-02-28
+/*! Simpleslider - v1.0.1 - 2014-02-28
 * https://github.com/vlewin/jquery.simpleslider
 * Copyright (c) 2014 Vladislav Lewinn; Licensed MIT */
 
 /*global $:false */
-
 var SimpleSlider = function(element, opts) {
   this.init = function() {
     this.id = element.selector;
@@ -29,7 +28,12 @@ var SimpleSlider = function(element, opts) {
   //=== Chainable methods
   this.showBreadCrumb = function() {
     if(this.breadcrumb) {
-      var parentName = location.pathname.replace(/\//g, '').capitalize();
+      var parentName = $(this.id).find('section').data('crumb');
+
+      if(!parentName) {
+        parentName = location.pathname.replace(/\//g, '').capitalize();
+      }
+
       var childName = this.activeLink().data('title');
       var back_arrow = '<i class="fa fa-lg fa-arrow-circle-left"></i> ';
       var parent = '<li><a class="' + this.back_link_selector.replace('.', '') +'">' + back_arrow + parentName + '</a>';
@@ -47,7 +51,7 @@ var SimpleSlider = function(element, opts) {
   };
 
   this.html = function(data) {
-    $(this.id).find('ul li:last-of-type').html(data);
+    $(this.id).find('section article:last-of-type').html(data);
     return this;
   };
 
@@ -57,19 +61,17 @@ var SimpleSlider = function(element, opts) {
   };
 
   this.slide = function(direction) {
-    var first_slide = $(this.id).find('ul li:first-of-type');
-
-    // if (typeof(animation) === 'undefined') {
-    //   first_slide.addClass('animated');
-    // } else {
-    //   first_slide.removeClass('animated');
-    // }
+    var $first_slide = $(this.id).find('section article:first-of-type');
+    var $last_slide = $(this.id).find('section article:last-of-type');
 
     if (direction === 'right') {
-      first_slide.css('margin-left', '-100%').css('visibility', 'hidden');
+      $first_slide.css('margin-left', '-100%').css('visibility', 'hidden');
+      $last_slide.css('visibility', 'visible');
     } else {
-      first_slide.css('margin-left', '0%').css('visibility', 'visible');
+      $first_slide.css('margin-left', '0%').css('visibility', 'visible');
+      $last_slide.css('visibility', 'hidden');
     }
+
     return this;
   };
 
@@ -79,13 +81,12 @@ var SimpleSlider = function(element, opts) {
       plugin.showBreadCrumb().slide('right').html(data);
     });
 
-    $(this.id).find('ul li:last-of-type').addClass('active');
-
     return this;
   };
 
   this.back = function() {
-    $(this.id).find('ul li:last-of-type').removeClass('active');
+    $(this.id).find('section article:first-of-type').css('visibility', 'visible');
+    $(this.id).find('section article:last-of-type').css('visibility', 'hidden');
     this.hideBreadCrumb().slide('left');
   };
 
@@ -94,8 +95,6 @@ var SimpleSlider = function(element, opts) {
     var plugin = this;
 
     $(window).on('load', function(e) {
-      // console.info('Window.onload');
-
       if (location.hash) {
         e.preventDefault();
 
@@ -113,8 +112,6 @@ var SimpleSlider = function(element, opts) {
     });
 
     $(window).on('popstate', function(e) {
-      // console.info('window.popstate');
-
       if (location.hash) {
         e.preventDefault();
 
@@ -167,8 +164,8 @@ var SimpleSlider = function(element, opts) {
 
 $.fn.simpleslider = function(options) {
   var opts = $.extend({}, $.fn.simpleslider.defaults, options);
-  var slider_instance = new SimpleSlider($(this), opts);
-  return slider_instance.init();
+  var div_instance = new SimpleSlider($(this), opts);
+  return div_instance.init();
 };
 
 

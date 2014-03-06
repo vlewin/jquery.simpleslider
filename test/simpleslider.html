@@ -7,6 +7,7 @@
   <script src="../libs/jquery-loader.js"></script>
   <!-- Load local QUnit. -->
   <link rel="stylesheet" href="../libs/qunit/qunit.css" media="screen">
+  <link rel="stylesheet" href="../src/simpleslider.css" media="screen">
 
   <script src="../libs/qunit/qunit.js"></script>
   <script src="../libs/sinon/sinon-1.8.2.js"></script>
@@ -26,15 +27,15 @@
 
   <ul id="breadcrumb"></ul>
   <div id="simpleslider">
-    <ul>
-      <li>
+    <section data-crumb="Posts">
+      <article>
         First page
         <a href="/posts/1" data-title="Title 1" data-target="#1" data-no-turbolink="true" data-id="1" class="slink">Show</a>
-      </li>
-      <li>
+      </article>
+      <article>
         Last page
         <a href="/posts" class="back">Back</a>
-      </li>
+      </article>
     </ul>
   </div>
 </body>
