@@ -1,4 +1,4 @@
-/*! Simplediv - v0.1.0 - 2014-02-28
+/*! Simplediv - 1.0.3 - 2014-03-13
 * https://github.com/vlewin/jquery.simplediv
 * Copyright (c) 2014 Vladislav Lewinn; Licensed MIT */
 
@@ -8,6 +8,7 @@ var SimpleSlider = function(element, opts) {
   this.init = function() {
     this.id = element.selector;
     this.element = $(this.selector);
+    this.spinner = opts.spinner;
     this.breadcrumb = opts.breadcrumb;
     this.breadcrumb_selector = opts.breadcrumb_selector;
     this.link_selector = opts.link_selector;
@@ -34,7 +35,6 @@ var SimpleSlider = function(element, opts) {
 
       var pathname = (location.pathname+location.hash);
       var childName = sessionStorage.getItem(pathname);
-
       var back_arrow = '<i class="fa fa-lg fa-arrow-circle-left"></i> ';
       var parent = '<li><a class="' + this.back_link_selector.replace('.', '') +'">' + back_arrow + parentName + '</a>';
       var child = '<li><a>' + childName + '</a></li>';
@@ -56,7 +56,12 @@ var SimpleSlider = function(element, opts) {
   };
 
   this.wait = function() {
-    this.html('<img src="/assets/spinner.gif" alt="Spinner"> Please wait ...');
+    if(this.spinner) {
+      this.html(this.spinner);
+    } else {
+      this.html('<img src="/assets/spinner.gif" alt="Spinner"> Please wait ...');
+    }
+
     return this;
   };
 
@@ -81,8 +86,10 @@ var SimpleSlider = function(element, opts) {
 
   this.forward = function(pageurl) {
     var plugin  = this;
+    plugin.wait().slide('right');
+
     $.get(pageurl, function(data) {
-      plugin.showBreadCrumb().slide('right').html(data);
+      plugin.showBreadCrumb().html(data);
     });
 
     return this;
@@ -191,3 +198,4 @@ Number.prototype.px = function () {
 Array.prototype.last = function () {
   return this[this.length - 1];
 };
+
