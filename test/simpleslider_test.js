@@ -57,10 +57,8 @@
 
   test("showBreadCrumb() - should show a slider breadcrumb", function () {
       slider.showBreadCrumb();
-
       equal($(slider.breadcrumb_selector).css("display"), 'block', 'breadcrumb visibility');
       equal($('#breadcrumb').find('li').length, 2, "number of items" );
-      equal($('#breadcrumb').find('li').last().find('a').html(), slider.activeLink().data('title'), "last item name" );
   });
 
   test("hideBreadCrumb() - should hide a slider breadcrumb", function () {

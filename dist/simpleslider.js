@@ -1,11 +1,12 @@
-/*! Simpleslider - v0.1.0 - 2014-03-06
+/*! Simpleslider - v0.1.0 - 2014-03-13
 * https://github.com/vlewin/jquery.simpleslider
 * Copyright (c) 2014 Vladislav Lewinn; Licensed MIT */
-/*! Simpleslider - v1.0.1 - 2014-02-28
-* https://github.com/vlewin/jquery.simpleslider
+/*! Simplediv - v0.1.0 - 2014-02-28
+* https://github.com/vlewin/jquery.simplediv
 * Copyright (c) 2014 Vladislav Lewinn; Licensed MIT */
 
 /*global $:false */
+
 var SimpleSlider = function(element, opts) {
   this.init = function() {
     this.id = element.selector;
@@ -34,7 +35,9 @@ var SimpleSlider = function(element, opts) {
         parentName = location.pathname.replace(/\//g, '').capitalize();
       }
 
-      var childName = this.activeLink().data('title');
+      var pathname = (location.pathname+location.hash);
+      var childName = sessionStorage.getItem(pathname);
+
       var back_arrow = '<i class="fa fa-lg fa-arrow-circle-left"></i> ';
       var parent = '<li><a class="' + this.back_link_selector.replace('.', '') +'">' + back_arrow + parentName + '</a>';
       var child = '<li><a>' + childName + '</a></li>';
@@ -73,6 +76,10 @@ var SimpleSlider = function(element, opts) {
     }
 
     return this;
+  };
+
+  this.remember = function(url, title) {
+    sessionStorage.setItem(url, title);
   };
 
   this.forward = function(pageurl) {
@@ -128,8 +135,10 @@ var SimpleSlider = function(element, opts) {
 
       var id = $(this).data('id');
       var target = $(this).data('target');
+      var title = $(this).data('title');
       var history_pathname = this.pathname.replace(id, target);
 
+      plugin.remember(history_pathname, title);
       plugin.forward(this.pathname);
 
       // Browser history
@@ -150,7 +159,7 @@ var SimpleSlider = function(element, opts) {
 
         // Browser history
         window.history.pushState(
-          {path: location.pathname},
+          { path: location.pathname },
           'Index',
           location.pathname
         );
@@ -164,8 +173,8 @@ var SimpleSlider = function(element, opts) {
 
 $.fn.simpleslider = function(options) {
   var opts = $.extend({}, $.fn.simpleslider.defaults, options);
-  var div_instance = new SimpleSlider($(this), opts);
-  return div_instance.init();
+  var slider_instance = new SimpleSlider($(this), opts);
+  return slider_instance.init();
 };
 
 
