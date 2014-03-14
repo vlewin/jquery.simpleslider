@@ -1,4 +1,4 @@
-/*! Simplediv - 1.0.3 - 2014-03-13
+/*! Simplediv - 1.0.4 - 2014-03-14
 * https://github.com/vlewin/jquery.simplediv
 * Copyright (c) 2014 Vladislav Lewinn; Licensed MIT */
 
@@ -8,11 +8,12 @@ var SimpleSlider = function(element, opts) {
   this.init = function() {
     this.id = element.selector;
     this.element = $(this.selector);
-    this.spinner = opts.spinner;
-    this.breadcrumb = opts.breadcrumb;
-    this.breadcrumb_selector = opts.breadcrumb_selector;
     this.link_selector = opts.link_selector;
     this.back_link_selector = opts.back_link_selector;
+
+    this.spinner = opts.spinner;
+    this.breadcrumb = opts.breadcrumb;
+    this.breadcrumb_selector = opts.breadcrumb.selector;
 
     this.bind();
 
@@ -26,7 +27,7 @@ var SimpleSlider = function(element, opts) {
 
   //=== Chainable methods
   this.showBreadCrumb = function() {
-    if(this.breadcrumb) {
+    if(this.breadcrumb.show) {
       var parentName = $(this.id).find('section').data('crumb');
 
       if(!parentName) {
@@ -37,15 +38,30 @@ var SimpleSlider = function(element, opts) {
       var childName = sessionStorage.getItem(pathname);
       var back_arrow = '<i class="fa fa-lg fa-arrow-circle-left"></i> ';
       var parent = '<li><a class="' + this.back_link_selector.replace('.', '') +'">' + back_arrow + parentName + '</a>';
-      var child = '<li><a>' + childName + '</a></li>';
-      $(this.breadcrumb_selector).html(parent).append(child).show();
+      var child = '<li>' + childName + '</li>';
+
+      var $breadcrumb = $(this.breadcrumb_selector);
+
+      if(this.breadcrumb.animate === true) {
+        $breadcrumb.html(parent).append(child).css('width', '0').show().animate({
+          width: "100%"
+        }, this.breadcrumb.speed);
+      } else {
+        $breadcrumb.html(parent).append(child).show();
+      }
     }
+
     return this;
   };
 
   this.hideBreadCrumb = function() {
-    if(this.breadcrumb) {
-      $(this.breadcrumb_selector).html('');
+    if(this.breadcrumb.show) {
+      var $breadcrumb = $(this.breadcrumb_selector);
+      if(this.breadcrumb.animate === true) {
+        $breadcrumb.css('width', '0').html('');
+      } else {
+        $breadcrumb.html('');
+      }
     }
     return this;
   };
@@ -86,9 +102,17 @@ var SimpleSlider = function(element, opts) {
 
   this.forward = function(pageurl) {
     var plugin  = this;
-    plugin.wait().slide('right');
 
-    $.get(pageurl, function(data) {
+    $.ajax({
+      url: pageurl,
+      beforeSend: function() {
+        setTimeout(function(){
+          plugin.slide('right');
+        }, 150);
+
+        plugin.wait();
+      }
+    }).done(function( data ) {
       plugin.showBreadCrumb().html(data);
     });
 
@@ -98,7 +122,7 @@ var SimpleSlider = function(element, opts) {
   this.back = function() {
     $(this.id).find('section article:first-of-type').css('visibility', 'visible');
     $(this.id).find('section article:last-of-type').css('visibility', 'hidden');
-    this.hideBreadCrumb().slide('left');
+    this.slide('left').hideBreadCrumb();
   };
 
   // DOM event handling
