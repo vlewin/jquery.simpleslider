@@ -1,3 +1,6 @@
+/*! Simpleslider - v1.0.5 - 2015-01-27
+* https://github.com/vlewin/jquery.simpleslider
+* Copyright (c) 2015 Vladislav Lewin; Licensed MIT */
 /*! Simpleslider - v1.0.4 - 2014-03-14
 * https://github.com/vlewin/jquery.simpleslider
 * Copyright (c) 2014 Vladislav Lewinn; Licensed MIT */
@@ -133,31 +136,31 @@ var SimpleSlider = function(element, opts) {
     var plugin = this;
 
     $(window).on('load', function(e) {
-      if (location.hash) {
-        e.preventDefault();
-
-        plugin.forward(location.href.replace('#', ''));
-        return false;
-
-      } else {
-        // Browser history
-        window.history.pushState(
-          { path: location.pathname },
-          'Index',
-          location.pathname
-        );
+      if($(plugin.id).length === 1) {
+        if(location.hash) {
+          e.preventDefault();
+          plugin.forward(location.href.replace('#', ''));
+          return false;
+        } else {
+          // Browser history
+          window.history.pushState(
+            { path: location.pathname },
+            'Index',
+            location.pathname
+          );
+        }
       }
     });
 
     $(window).on('popstate', function(e) {
-      if (location.hash) {
-        e.preventDefault();
-
-        plugin.forward(location.href.replace('#', ''));
-        return false;
-
-      } else {
-        plugin.back();
+      if($(plugin.id).length === 1) {
+        if(location.hash) {
+          e.preventDefault();
+          plugin.forward(location.href.replace('#', ''));
+          return false;
+        } else {
+          plugin.back();
+        }
       }
     });
 
