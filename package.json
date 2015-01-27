@@ -1,6 +1,12 @@
 {
   "name": "jquery.simpleslider",
   "version": "0.0.0-ignored",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vlewin/jquery.simpleslider.git"
+  },
+
   "engines": {
     "node": ">= 0.8.0"
   },

@@ -2,11 +2,11 @@
   "name": "simpleslider",
   "title": "Simpleslider",
   "description": "The best jQuery plugin ever.",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "homepage": "https://github.com/vlewin/jquery.simpleslider",
   "author": {
-    "name": "Vladislav Lewinn",
-    "email": "vlewin@suse.de"
+    "name": "Vladislav Lewin",
+    "email": "vlewin[at]suse.de"
   },
   "repository": {
     "type": "git",
